@@ -1,0 +1,69 @@
+# Docker
+# Build a Docker image 
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+parameters:
+- name: BUILD
+  type: boolean
+  default: true
+- name: DEPLOY
+  type: boolean
+  default: false
+- name: serviceConnection
+  default: 'xxx' 
+- name: nameSpace
+  default: 'yyy' 
+- name: commands
+  default: 'zzz' 
+- name: arguments
+  default: 'xxx' 
+
+
+resources:
+- repo: self
+
+variables:
+- template: values.yml
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:  
+  - ${{ if eq(parameters.BUILD, true) }}:
+    - job: Build
+      displayName: Build
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+      - task: Docker@2
+        inputs:
+          containerRegistry: 'Docker'
+          repository: 'bala2805/k8s_project'
+          command: 'buildAndPush'
+          Dockerfile: '**/Dockerfile'
+          tags: |
+            ${{ variables.tag }}
+   
+  - ${{ if eq(parameters.DEPLOY, true) }}:          
+    - job: DEPLOY
+      displayName: DEPLOY
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+      - bash: |
+         export REPLICAS=${{variables.REPLICAS}}
+         export TARGETPORT=${{variables.TARGETPORT}}
+         export IMAGE=${{variables.IMAGE}}
+         export CONTAINERPORT=${{variables.CONTAINERPORT}}
+         cat ${{ parameters.arguments }} | envsubst > deployment.yml
+      - task: Kubernetes@1
+        displayName: kubectl apply using arguments
+        inputs:
+          connectionType: Kubernetes Service Connection
+          kubernetesServiceEndpoint: ${{ parameters.serviceConnection }}
+          namespace: ${{ parameters.nameSpace }}
+          command: ${{ parameters.commands }}
+          arguments: -f  deployment.yml
