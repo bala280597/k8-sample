@@ -1,1 +1,97 @@
-
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver
+spec:
+ replicas: 3
+ selector:
+   matchLabels:
+    app: apache
+ template:
+   metadata:
+    labels:
+     app: apache
+   spec:
+    containers:
+      - name: apache
+        image: bala2805/k8s_project:56
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: hostvol
+          mountPath: /var/www/html/
+    volumes:
+      - name: hostvol
+        hostPath:
+          path: /data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  labels:
+    run: web-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: apache
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql8
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql8
+    spec:
+      containers:
+        - image: bala2805/k8s_project:56
+          name: mysql
+          ports:
+          - containerPort: 3306
+            name: mysql8
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql8-service
+  labels:
+    app: mysql8
+spec:
+  type: NodePort
+  ports:
+  - port: 3306
+    protocol: TCP
+  selector:
+    app: mysql8
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+    app: mysql8
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 0.5Gi #5 GB
