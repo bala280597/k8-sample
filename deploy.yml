@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: webserver
 spec:
- replicas: 3
+ replicas: ${WEBREPLICA}
  selector:
    matchLabels:
     app: apache
@@ -15,16 +15,16 @@ spec:
    spec:
     containers:
       - name: apache
-        image: bala2805/k8s_project:56
+        image: ${IMAGE}
         ports:
-        - containerPort: 80
+        - containerPort: ${WEBCONTAINER_PORT}
         volumeMounts:
         - name: hostvol
           mountPath: /var/www/html/
     volumes:
       - name: hostvol
         hostPath:
-          path: /data
+          path: ./src/
 ---
 apiVersion: v1
 kind: Service
@@ -33,9 +33,9 @@ metadata:
   labels:
     run: web-service
 spec:
-  type: LoadBalancer
+  type: ${WEB_SERVICE_TYPE}
   ports:
-  - port: 80
+  - port: ${WEB_SERVICEPORT}
     protocol: TCP
   selector:
     app: apache
@@ -48,26 +48,24 @@ spec:
   selector:
     matchLabels:
       app: mysql8
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
         app: mysql8
     spec:
       containers:
-      - image: mysql:8.0
+      - image: ${IMAGE}
         name: mysql
         ports:
-        - containerPort: 3306
+        - containerPort: ${SQL_CONTAINER_PORT}
           name: mysql8
         volumeMounts:
-          - name: mysql-persistent-storage
+          - name: ${VOLUME_SQL_NAME}
             mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-persistent-storage
+      - name: ${VOLUME_SQL_NAME}
         persistentVolumeClaim:
-          claimName: mysql-pv-claim
+          claimName: ${PVC_NAME}
 ---
 apiVersion: v1
 kind: Service
@@ -76,9 +74,9 @@ metadata:
   labels:
     app: mysql8
 spec:
-  type: NodePort
+  type: ${SQL_SERVICE_TYPE}
   ports:
-  - port: 3306
+  - port: ${SQL_SERVICE_PORT}
     protocol: TCP
   selector:
     app: mysql8
@@ -86,12 +84,12 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pv-claim
+  name: ${PVC_NAME}
   labels:
     app: mysql8
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ${ACCESSModes}
   resources:
     requests:
-      storage: 0.5Gi #5 GB
+      storage: ${STORAGE_MOUNT}
