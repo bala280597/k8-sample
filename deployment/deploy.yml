@@ -24,7 +24,7 @@ spec:
     volumes:
       - name: hostvol
         hostPath:
-          path: /data
+          path: ./src/
 ---
 apiVersion: v1
 kind: Service
