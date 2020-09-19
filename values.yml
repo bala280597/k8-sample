@@ -1,6 +1,18 @@
 variables:
-  REPLICAS: 1
-  TARGETPORT: 8080
-  IMAGE: bala2805/k8s_project
-  CONTAINERPORT: 8080
+  #webservice_frontend
+  WEBREPLICA: 1
+  WEB_SERVICEPORT: 80
+  WEBCONTAINER_PORT: 80
+  IMAGE: bala2805/k8s_project:56
+  WEB_SERVICE_TYPE: NodePort
+  #sqlservice_backend
+  SQL_CONTAINER_PORT: 3306
+  SQL_SERVICE_PORT: 3306
+  VOLUME_SQL_NAME: mysql-persistent-storage
+  SQL_SERVICE_TYPE: NodePort
+  #pvc
+  ACCESSModes: ReadWriteOnce
+  STORAGE_MOUNT: 0.5Gi #.5 GB
+  PVC_NAME: mysql-pv-claim
+  #dockerimage tagging with build id
   tag: '$(Build.BuildId)'
