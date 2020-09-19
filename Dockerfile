@@ -1,8 +1,9 @@
 FROM ubuntu:16.04
-RUN useradd -ms /bin/bash bala
+#RUN useradd -ms /bin/bash bala
+RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1001 ubuntu -p Ab2424115
 USER bala
-RUN apt-get -y update && apt-get -y upgrade
-RUN  apt-get -y install apache2 \
+RUN sudo apt-get -y update && apt-get -y upgrade
+RUN sudo  apt-get -y install apache2 \
                                 php php-mysql\
                                 libapache2-mod-php\
                                 php-xml\
