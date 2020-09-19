@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 #RUN useradd -ms /bin/bash bala
-RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1001 ubuntu -p Ab2424115
+RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1001 bala -p Ab2424115
 USER bala
 RUN sudo apt-get -y update && apt-get -y upgrade
 RUN sudo  apt-get -y install apache2 \
