@@ -54,17 +54,17 @@ stages:
         vmImage: 'ubuntu-latest'
       steps:
       - bash: |
-          export WEBREPLICA: ${{variables.WEBREPLICA}}
-          export WEB_SERVICEPORT: ${{variables.WEB_SERVICEPORT}}
-          export WEBCONTAINER_PORT: ${{variables.WEBCONTAINER_PORT}}
-          export IMAGE: ${{variables.IMAGE}}
-          export WEB_SERVICE_TYPE: ${{variables.WEB_SERVICE_TYPE}}
-          export SQL_CONTAINER_PORT: ${{variables.SQL_CONTAINER_PORT}}
-          export SQL_SERVICE_PORT: ${{variables.SQL_SERVICE_PORT}}
-          export VOLUME_SQL_NAME: ${{variables.VOLUME_SQL_NAME}}
-          export SQL_SERVICE_TYPE: ${{variables.SQL_SERVICE_TYPE}}
-          export STORAGE_MOUNT: ${{variables.STORAGE_MOUNT}}
-          export PVC_NAME:${{variables.PVC_NAME}}
+          export WEBREPLICA=${{variables.WEBREPLICA}}
+          export WEB_SERVICEPORT=${{variables.WEB_SERVICEPORT}}
+          export WEBCONTAINER_PORT=${{variables.WEBCONTAINER_PORT}}
+          export IMAGE=${{variables.IMAGE}}
+          export WEB_SERVICE_TYPE=${{variables.WEB_SERVICE_TYPE}}
+          export SQL_CONTAINER_PORT=${{variables.SQL_CONTAINER_PORT}}
+          export SQL_SERVICE_PORT=${{variables.SQL_SERVICE_PORT}}
+          export VOLUME_SQL_NAME=${{variables.VOLUME_SQL_NAME}}
+          export SQL_SERVICE_TYPE=${{variables.SQL_SERVICE_TYPE}}
+          export STORAGE_MOUNT=${{variables.STORAGE_MOUNT}}
+          export PVC_NAME=${{variables.PVC_NAME}}
           cat ${{ parameters.arguments }} | envsubst > deployment.yml
       
         displayName: ENV Substitution
