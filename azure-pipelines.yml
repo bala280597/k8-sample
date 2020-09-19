@@ -63,7 +63,6 @@ stages:
           export SQL_SERVICE_PORT: ${{variables.SQL_SERVICE_PORT}}
           export VOLUME_SQL_NAME: ${{variables.VOLUME_SQL_NAME}}
           export SQL_SERVICE_TYPE: ${{variables.SQL_SERVICE_TYPE}}
-          export ACCESSModes: ${{variables.ACCESSModes}}
           export STORAGE_MOUNT: ${{variables.STORAGE_MOUNT}}
           export PVC_NAME:${{variables.PVC_NAME}}
           cat ${{ parameters.arguments }} | envsubst > deployment.yml
