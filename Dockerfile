@@ -1,4 +1,5 @@
 FROM ubuntu:16.04
+USER bala
 RUN apt-get -y update && apt-get -y upgrade
 RUN  apt-get -y install apache2 \
                                 php php-mysql\
