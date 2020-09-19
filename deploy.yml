@@ -24,7 +24,7 @@ spec:
     volumes:
       - name: hostvol
         hostPath:
-          path: ./src/
+          path: /data
 ---
 apiVersion: v1
 kind: Service
@@ -56,14 +56,14 @@ spec:
         app: mysql8
     spec:
       containers:
-        - image: bala2805/k8s_project:56
-          name: mysql
-          ports:
-          - containerPort: 3306
-            name: mysql8
-          volumeMounts:
-            - name: mysql-persistent-storage
-              mountPath: /var/lib/mysql
+      - image: mysql:8.0
+        name: mysql
+        ports:
+        - containerPort: 3306
+          name: mysql8
+        volumeMounts:
+          - name: mysql-persistent-storage
+            mountPath: /var/lib/mysql
       volumes:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
