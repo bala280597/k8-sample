@@ -1,0 +1,6 @@
+variables:
+  REPLICAS: 1
+  TARGETPORT: 8080
+  IMAGE: bala2805/k8s_project
+  CONTAINERPORT: 8080
+  tag: '$(Build.BuildId)'
