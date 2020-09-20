@@ -29,7 +29,7 @@ EXPOSE 80
 RUN  wget https://releases.wikimedia.org/mediawiki/1.34/mediawiki-1.34.2.tar.gz
 RUN tar -xvzf /tmp/mediawiki-1.34.2.tar.gz
 RUN mkdir /var/lib/mediawiki
-RUN mv mediawiki-1.34.2.tar.gz /var/lib/mediawiki
+RUN mediawiki-*/* /var/lib/mediawiki
 
 #Configure and install sql
 RUN apt-get update \
