@@ -43,7 +43,6 @@ CMD ["mysqld_safe"]
 RUN systemctl enable mysql
 
 #RUN mysql -u root
-#RUN CREATE USER 'new_mysql_user'@'localhost' IDENTIFIED BY 'THISpasswordSHOULDbeCHANGED';
 #RUN CREATE DATABASE my_wiki;
 #RUN use my_wiki;
 #RUN GRANT ALL ON my_wiki.* TO 'new_mysql_user'@'localhost';
