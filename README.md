@@ -203,10 +203,21 @@ spec:
         volumeMounts:
         - name: hostvol
           mountPath: /var/www/html/
-    volumes:
+      - name: mysql
+	    image: ${IMAGE}
+        ports:
+        - containerPort: ${SQL_CONTAINER_PORT}
+          name: mysql8
+        volumeMounts:
+          - name: ${VOLUME_SQL_NAME}
+            mountPath: /var/lib/mysql
+      volumes:
+      - name: ${VOLUME_SQL_NAME}
+        persistentVolumeClaim:
+          claimName: ${PVC_NAME}
       - name: hostvol
         hostPath:
-          path: ./src/
+          path: ./tmp
 ---
 apiVersion: v1
 kind: Service
@@ -219,56 +230,17 @@ spec:
   ports:
   - port: ${WEB_SERVICEPORT}
     protocol: TCP
-  selector:
-    app: apache
----
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
-kind: Deployment
-metadata:
-  name: mysql
-spec:
-  selector:
-    matchLabels:
-      app: mysql8
-  template:
-    metadata:
-      labels:
-        app: mysql8
-    spec:
-      containers:
-      - image: ${IMAGE}
-        name: mysql
-        ports:
-        - containerPort: ${SQL_CONTAINER_PORT}
-          name: mysql8
-        volumeMounts:
-          - name: ${VOLUME_SQL_NAME}
-            mountPath: /var/lib/mysql
-      volumes:
-      - name: ${VOLUME_SQL_NAME}
-        persistentVolumeClaim:
-          claimName: ${PVC_NAME}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysql8-service
-  labels:
-    app: mysql8
-spec:
-  type: ${SQL_SERVICE_TYPE}
-  ports:
   - port: ${SQL_SERVICE_PORT}
     protocol: TCP
   selector:
-    app: mysql8
+    app: apache
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ${PVC_NAME}
   labels:
-    app: mysql8
+    app: apache
 spec:
   accessModes:
     - ReadWriteOnce
