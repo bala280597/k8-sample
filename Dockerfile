@@ -17,7 +17,7 @@ RUN apt-get install -y php-apcu \
                               php-curl\
                               git\
                               wget                  
-RUN apt-get install -y apache2 php libapache2-mod-php php-mcrypt php-mysql php-curl php-xml php-memcached
+RUN apt-get install -y sudo apt-get install apache2 mysql-server php php-mysql libapache2-mod-php php-xml php-mbstring
 RUN service apache2 restart
 
 #Port expose and php deploy
