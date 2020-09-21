@@ -1,6 +1,5 @@
 FROM ubuntu:16.04
 #RUN useradd -ms /bin/bash bala
-#RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1001 bala -p Ab2424115
 #USER bala
 RUN  apt-get -y update && apt-get -y upgrade
 RUN   apt-get -y install apache2 \
@@ -23,7 +22,7 @@ RUN service apache2 restart
 WORKDIR /tmp/
 EXPOSE 80
 
-#mediawiki wget
+#mediawiki deployment in apache2
 RUN  wget https://releases.wikimedia.org/mediawiki/1.33/mediawiki-1.33.2.tar.gz
 RUN tar -xvzf /tmp/mediawiki-1.33.2.tar.gz
 RUN mkdir /var/lib/mediawiki
@@ -40,9 +39,3 @@ VOLUME ["/var/lib/mysql"]
 EXPOSE 3306
 CMD ["mysqld_safe"]
 RUN systemctl enable mysql
-
-#RUN mysql -u root
-#RUN CREATE DATABASE my_wiki;
-#RUN use my_wiki;
-#RUN GRANT ALL ON my_wiki.* TO 'new_mysql_user'@'localhost';
-#RUN exit;
