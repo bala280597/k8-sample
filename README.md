@@ -6,8 +6,11 @@
 
 # Mediawiki created page through automation
 
+Frontend:
 ![Mediawiki](https://user-images.githubusercontent.com/47313756/93746951-9275e700-fc13-11ea-9cf0-36f07446624f.png)
 
+Backend:
+![SQL sync](https://user-images.githubusercontent.com/47313756/93747085-cd781a80-fc13-11ea-9e5f-d33ca4c1533e.png)
 
 # Description:
 In this project, I am deploying binaries of sample java application in Azure Kubernetes Service in desired cluster using docker image.
@@ -23,12 +26,13 @@ I used Azure agent for the pipeline operation for the time being. The best pract
 pool:
     vmImage: 'ubuntu-latest'
 ```
-# Screenshot
-I attached Screenshots to Screenshot folders at root directory.
-
 # Pipeline creation:
 In the Pipeline , we have 2 boolean parameters called 'BUILD' and 'DEPLOY'. By this parameters we can select the BUILD and  DEPLOY stages. In some case , If we want to delete or list the pods or other kinds in K8s , we don't need to build a docker image. In that scenario we can select DEPLOY checkbox itself. Only Deploy stage will run.
 Some other parameters also mandatory , I would explain in later part of this article while explain about DEPLOY stage.
+
+![Pipeline](https://user-images.githubusercontent.com/47313756/93747675-ab32cc80-fc14-11ea-826b-56d273c38d9a.png)
+
+
 ```yaml DOCKERFILE
 trigger:
 - master
@@ -154,6 +158,10 @@ arguments: Path of deployment file
 ```
 Note : As this approach , We can create every Kind in kubernetes in same yaml file or else need to create seperate task for each kind.
 Example: We need to create Deployment and Service Kind means , I would recommend to create single YAML with Service and Deployment kind rather than seperate file for each.
+
+![BothStages](https://user-images.githubusercontent.com/47313756/93747657-a40bbe80-fc14-11ea-998a-f53af37eb376.png)
+
+
 # ENVIRONMENT Substitution with shell script
 ```YAML
 export WEBREPLICA=${{variables.WEBREPLICA}}
@@ -270,6 +278,8 @@ spec:
 ```
 In the above Yaml, I had created Kind: Deployment and Service of front end and backend in single `deploy.yml` file.
 
+![Deployment Stage](https://user-images.githubusercontent.com/47313756/93747670-a79f4580-fc14-11ea-87ae-54c62acdc320.png)
+
 # Parameters for values.yml
 The user can add following details in `values.yml` file which can be substituted for the deploy.yml.
 ```YAML
@@ -292,9 +302,5 @@ variables:
   tag: '$(Build.BuildId)'
 ```
 These variables are substituted in `deploy.yml`. So With these we can use our deployment file as template and passing variables dynamically.
-
-# sql sync with frontend
-![SQL sync](https://user-images.githubusercontent.com/47313756/93747085-cd781a80-fc13-11ea-9e5f-d33ca4c1533e.png)
-
 
 # Thank You
