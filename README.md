@@ -93,7 +93,6 @@ I created `Dockerfile`. As entire flow needs containerization. In this stage , d
 ```yaml DOCKERFILE
 FROM ubuntu:16.04
 #RUN useradd -ms /bin/bash bala
-#RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1001 bala -p Ab2424115
 #USER bala
 RUN  apt-get -y update && apt-get -y upgrade
 RUN   apt-get -y install apache2 \
@@ -110,19 +109,17 @@ RUN apt-get install -y php-apcu \
                               php-curl\
                               git\
                               wget                  
-RUN apt-get install -y apache2 php libapache2-mod-php php-mcrypt php-mysql php-curl php-xml php-memcached
-RUN service apache2 restart
-
+RUN /etc/init.d/apache2 restart
 #Port expose and php deploy
 WORKDIR /tmp/
-COPY ./src/*.php /var/www/html/
 EXPOSE 80
 
-#mediawiki wget
-RUN  wget https://releases.wikimedia.org/mediawiki/1.34/mediawiki-1.34.2.tar.gz
-RUN tar -xvzf /tmp/mediawiki-1.34.2.tar.gz
+#mediawiki deployment in apache2
+RUN  wget https://releases.wikimedia.org/mediawiki/1.33/mediawiki-1.33.2.tar.gz
+RUN tar -xvzf /tmp/mediawiki-1.33.2.tar.gz
 RUN mkdir /var/lib/mediawiki
-RUN mv mediawiki-1.34.2.tar.gz /var/lib/mediawiki
+RUN mv mediawiki-*/* /var/lib/mediawiki
+RUN ln -s /var/lib/mediawiki /var/www/html/mediawiki
 
 #Configure and install sql
 RUN apt-get update \
