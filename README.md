@@ -4,6 +4,8 @@
 | -------- | -------- |--------|
 | Azure Kubernetes Service |Cloud  | BALAMURUGAN BASKARAN|
 
+![Mediawiki](https://user-images.githubusercontent.com/47313756/93746951-9275e700-fc13-11ea-9cf0-36f07446624f.png)
+
 # Description:
 In this project, I am deploying binaries of sample java application in Azure Kubernetes Service in desired cluster using docker image.
 For Continious Integeration of Docker Build and AKS Deployment, I used Azure Devops. I developed automation script in `azure-pipelines.yml` .
