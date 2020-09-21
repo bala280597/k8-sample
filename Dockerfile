@@ -16,8 +16,7 @@ RUN apt-get install -y php-apcu \
                               php-curl\
                               git\
                               wget                  
-RUN service apache2 restart
-
+RUN /etc/init.d/apache2 restart
 #Port expose and php deploy
 WORKDIR /tmp/
 EXPOSE 80
