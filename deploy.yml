@@ -21,8 +21,41 @@ spec:
         volumeMounts:
         - name: hostvol
           mountPath: /var/www/html/
-      - name: mysql
-	    image: ${IMAGE}
+    volumes:
+      - name: hostvol
+        hostPath:
+          path: ./src/
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  labels:
+    run: web-service
+spec:
+  type: ${WEB_SERVICE_TYPE}
+  ports:
+  - port: ${WEB_SERVICEPORT}
+    protocol: TCP
+  selector:
+    app: apache
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql8
+  template:
+    metadata:
+      labels:
+        app: mysql8
+    spec:
+      containers:
+      - image: ${IMAGE}
+        name: mysql
         ports:
         - containerPort: ${SQL_CONTAINER_PORT}
           name: mysql8
@@ -33,34 +66,27 @@ spec:
       - name: ${VOLUME_SQL_NAME}
         persistentVolumeClaim:
           claimName: ${PVC_NAME}
-      - name: hostvol
-        hostPath:
-          path: ./tmp
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: web-service
+  name: mysql8-service
   labels:
-    run: web-service
+    app: mysql8
 spec:
-  type: NodePort
+  type: ${SQL_SERVICE_TYPE}
   ports:
-  - name: apache
-    port: 80
-    protocol: TCP
-  - name: sql
-    port: 3306
+  - port: ${SQL_SERVICE_PORT}
     protocol: TCP
   selector:
-    app: apache        
+    app: mysql8
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ${PVC_NAME}
   labels:
-    app: apache
+    app: mysql8
 spec:
   accessModes:
     - ReadWriteOnce
