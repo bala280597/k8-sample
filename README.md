@@ -6,10 +6,10 @@
 
 # Mediawiki created page through automation
 
-Frontend:
+# Frontend:
 ![Mediawiki](https://user-images.githubusercontent.com/47313756/93746951-9275e700-fc13-11ea-9cf0-36f07446624f.png)
 
-Backend:
+# Backend:
 ![SQL sync](https://user-images.githubusercontent.com/47313756/93747085-cd781a80-fc13-11ea-9e5f-d33ca4c1533e.png)
 
 # Description:
