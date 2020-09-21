@@ -181,6 +181,7 @@ The K8s deloy file is with Dynamic variable get substituted.
 
 ```yaml deploy.yml
 ---
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -203,21 +204,10 @@ spec:
         volumeMounts:
         - name: hostvol
           mountPath: /var/www/html/
-      - name: mysql
-	    image: ${IMAGE}
-        ports:
-        - containerPort: ${SQL_CONTAINER_PORT}
-          name: mysql8
-        volumeMounts:
-          - name: ${VOLUME_SQL_NAME}
-            mountPath: /var/lib/mysql
-      volumes:
-      - name: ${VOLUME_SQL_NAME}
-        persistentVolumeClaim:
-          claimName: ${PVC_NAME}
+    volumes:
       - name: hostvol
         hostPath:
-          path: ./tmp
+          path: ./src/
 ---
 apiVersion: v1
 kind: Service
@@ -230,17 +220,56 @@ spec:
   ports:
   - port: ${WEB_SERVICEPORT}
     protocol: TCP
+  selector:
+    app: apache
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql8
+  template:
+    metadata:
+      labels:
+        app: mysql8
+    spec:
+      containers:
+      - image: ${IMAGE}
+        name: mysql
+        ports:
+        - containerPort: ${SQL_CONTAINER_PORT}
+          name: mysql8
+        volumeMounts:
+          - name: ${VOLUME_SQL_NAME}
+            mountPath: /var/lib/mysql
+      volumes:
+      - name: ${VOLUME_SQL_NAME}
+        persistentVolumeClaim:
+          claimName: ${PVC_NAME}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql8-service
+  labels:
+    app: mysql8
+spec:
+  type: ${SQL_SERVICE_TYPE}
+  ports:
   - port: ${SQL_SERVICE_PORT}
     protocol: TCP
   selector:
-    app: apache
+    app: mysql8
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ${PVC_NAME}
   labels:
-    app: apache
+    app: mysql8
 spec:
   accessModes:
     - ReadWriteOnce
