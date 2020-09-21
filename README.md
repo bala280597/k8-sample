@@ -4,6 +4,9 @@
 | -------- | -------- |--------|
 | Azure Kubernetes Service |Cloud  | BALAMURUGAN BASKARAN|
 
+# Website created
+http://192.168.99.100:32204/mediawiki/index.php/Main_Page
+
 
 # Description:
 In this project, I am deploying binaries of sample java application in Azure Kubernetes Service in desired cluster using docker image.
