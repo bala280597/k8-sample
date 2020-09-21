@@ -9,7 +9,6 @@ variables:
   SQL_CONTAINER_PORT: 3306
   SQL_SERVICE_PORT: 3306
   VOLUME_SQL_NAME: mysql-persistent-storage
-  SQL_SERVICE_TYPE: ClusterIP
   #pvc
   STORAGE_MOUNT: 0.5Gi #.5 GB
   PVC_NAME: mysql-pv-claim
