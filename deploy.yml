@@ -44,14 +44,16 @@ metadata:
   labels:
     run: web-service
 spec:
-  type: ${WEB_SERVICE_TYPE}
+  type: NodePort
   ports:
-  - port: ${WEB_SERVICEPORT}
+  - name: apache
+    port: 80
     protocol: TCP
-  - port: ${SQL_SERVICE_PORT}
+  - name: sql
+    port: 3306
     protocol: TCP
   selector:
-    app: apache
+    app: apache        
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
