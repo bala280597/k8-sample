@@ -4,7 +4,10 @@
 | -------- | -------- |--------|
 | Azure Kubernetes Service |Cloud  | BALAMURUGAN BASKARAN|
 
+# Mediawiki created page through automation
+
 ![Mediawiki](https://user-images.githubusercontent.com/47313756/93746951-9275e700-fc13-11ea-9cf0-36f07446624f.png)
+
 
 # Description:
 In this project, I am deploying binaries of sample java application in Azure Kubernetes Service in desired cluster using docker image.
@@ -289,6 +292,9 @@ variables:
   tag: '$(Build.BuildId)'
 ```
 These variables are substituted in `deploy.yml`. So With these we can use our deployment file as template and passing variables dynamically.
+
+# sql sync with frontend
+![SQL sync](https://user-images.githubusercontent.com/47313756/93747085-cd781a80-fc13-11ea-9e5f-d33ca4c1533e.png)
 
 
 # Thank You
