@@ -13,6 +13,7 @@ spec:
     labels:
      app: apache
    spec:
+    shareProcessNamespace: true
     containers:
       - name: apache
         image: ${IMAGE}
