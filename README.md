@@ -214,13 +214,15 @@ spec:
   type: ${WEB_SERVICE_TYPE}
   ports:
   - name: apache
-    port: ${WEBCONTAINER_PORT}
+    port: ${WEB_SERVICEPORT}
     protocol: ${WEB_PROTOCOL}
   - name: sql
-    port: ${SQL_CONTAINER_PORT}
+    port: ${SQL_SERVICE_PORT}
     protocol: ${SQL_PROTOCOL}
   selector:
     app: apache        
+
+
 ```
 In the above Yaml, I had created Kind: Deployment and Service of front end and backend in single `deploy.yml` file.
 
@@ -236,14 +238,11 @@ variables:
   WEBCONTAINER_PORT: 80
   IMAGE: bala2805/k8s_project:56
   WEB_SERVICE_TYPE: ClusterIP
+  WEB_PROTOCOL: TCP
   #sqlservice_backend
   SQL_CONTAINER_PORT: 3306
   SQL_SERVICE_PORT: 3306
-  VOLUME_SQL_NAME: mysql-persistent-storage
-  SQL_SERVICE_TYPE: ClusterIP
-  #pvc
-  STORAGE_MOUNT: 0.5Gi #.5 GB
-  PVC_NAME: mysql-pv-claim
+  SQL_PROTOCOL: TCP
   #dockerimage tagging with build id
   tag: '$(Build.BuildId)'
 ```
