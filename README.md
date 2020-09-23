@@ -7,6 +7,14 @@
 # Mediawiki created page through automation
 
 # Frontend:
+# Database connection with frontend
+![config](https://user-images.githubusercontent.com/47313756/93972046-2c15d380-fd8f-11ea-94fb-44615f6c769f.png)
+
+# Localsetting.php
+![LocalSetting](https://user-images.githubusercontent.com/47313756/93972055-3041f100-fd8f-11ea-9f72-c1d517620712.png)
+
+
+# Final page:
 ![Mediawiki](https://user-images.githubusercontent.com/47313756/93746951-9275e700-fc13-11ea-9cf0-36f07446624f.png)
 
 # Backend:
