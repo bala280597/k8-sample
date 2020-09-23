@@ -5,14 +5,12 @@ variables:
   WEBCONTAINER_PORT: 80
   IMAGE: bala2805/k8s_project:56
   WEB_SERVICE_TYPE: ClusterIP
+  WEB_PROTOCOL: TCP
   #sqlservice_backend
   SQL_CONTAINER_PORT: 3306
   SQL_SERVICE_PORT: 3306
-  VOLUME_SQL_NAME: mysql-persistent-storage
-  #pvc
-  STORAGE_MOUNT: 0.5Gi #.5 GB
-  PVC_NAME: mysql-pv-claim
+  SQL_PROTOCOL: TCP
   #dockerimage tagging with build id
-  #tag: '$(Build.BuildId)'
-  tag: 'final'
+  tag: '$(Build.BuildId)'
+  
   
