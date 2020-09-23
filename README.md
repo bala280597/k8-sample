@@ -199,25 +199,10 @@ spec:
       - name: apache
         image: ${IMAGE}
         ports:
-        - containerPort: ${WEBCONTAINER_PORT}
-        volumeMounts:
-        - name: hostvol
-          mountPath: /var/www/html/
-      - name: mysql
-	    image: ${IMAGE}
-        ports:
-        - containerPort: ${SQL_CONTAINER_PORT}
-          name: mysql8
-        volumeMounts:
-          - name: ${VOLUME_SQL_NAME}
-            mountPath: /var/lib/mysql
-      volumes:
-      - name: ${VOLUME_SQL_NAME}
-        persistentVolumeClaim:
-          claimName: ${PVC_NAME}
-      - name: hostvol
-        hostPath:
-          path: ./tmp
+        - name: apache
+          containerPort: ${WEBCONTAINER_PORT}
+        - name: mysql
+          containerPort: ${SQL_CONTAINER_PORT}
 ---
 apiVersion: v1
 kind: Service
@@ -228,25 +213,14 @@ metadata:
 spec:
   type: ${WEB_SERVICE_TYPE}
   ports:
-  - port: ${WEB_SERVICEPORT}
-    protocol: TCP
-  - port: ${SQL_SERVICE_PORT}
-    protocol: TCP
+  - name: apache
+    port: ${WEBCONTAINER_PORT}
+    protocol: ${WEB_PROTOCOL}
+  - name: sql
+    port: ${SQL_CONTAINER_PORT}
+    protocol: ${SQL_PROTOCOL}
   selector:
-    app: apache
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: ${PVC_NAME}
-  labels:
-    app: apache
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: ${STORAGE_MOUNT}
+    app: apache        
 ```
 In the above Yaml, I had created Kind: Deployment and Service of front end and backend in single `deploy.yml` file.
 
