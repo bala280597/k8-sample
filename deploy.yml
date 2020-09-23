@@ -32,10 +32,10 @@ spec:
   type: ${WEB_SERVICE_TYPE}
   ports:
   - name: apache
-    port: ${WEBCONTAINER_PORT}
+    port: ${WEB_SERVICEPORT}
     protocol: ${WEB_PROTOCOL}
   - name: sql
-    port: ${SQL_CONTAINER_PORT}
+    port: ${SQL_SERVICE_PORT}
     protocol: ${SQL_PROTOCOL}
   selector:
     app: apache        
