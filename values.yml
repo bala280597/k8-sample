@@ -14,5 +14,5 @@ variables:
   PVC_NAME: mysql-pv-claim
   #dockerimage tagging with build id
   #tag: '$(Build.BuildId)'
-  tag: '$(Build.BuildId)'
+  tag: 'final'
   
