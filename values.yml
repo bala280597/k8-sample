@@ -13,4 +13,6 @@ variables:
   STORAGE_MOUNT: 0.5Gi #.5 GB
   PVC_NAME: mysql-pv-claim
   #dockerimage tagging with build id
+  #tag: '$(Build.BuildId)'
   tag: '$(Build.BuildId)'
+  
