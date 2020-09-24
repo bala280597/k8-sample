@@ -17,7 +17,7 @@ RUN apt-get install -y php-apcu \
                               git\
                               wget                  
 
-CMD ["/etc/init.d/apache2", "-D", "FOREGROUND"]
+
 
 #Port expose and php deploy
 WORKDIR /tmp/
@@ -30,6 +30,7 @@ RUN mkdir /var/lib/mediawiki
 RUN mv mediawiki-*/* /var/lib/mediawiki
 RUN ln -s /var/lib/mediawiki /var/www/html/mediawiki
 
+RUN /etc/init.d/apache2 start
 #Configure and install sql
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server \
