@@ -22,5 +22,5 @@ steps:
           if [[ "$code" == *"200"* ]] || [[ "$code" == *"308"* ]]; then
               echo "mediawiki is Up and running with code $code"
           else
-              echo "SonarQube is Down Requires action, error code $code"       
+              echo "mediawiki is Down Requires action, error code $code"       
           fi
