@@ -1,0 +1,44 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+pool:
+  vmImage: 'ubuntu-latest'
+parameters:
+- name: url
+  type: string
+  default: 'enter the url'
+  
+trigger:
+  branches:
+    include:
+    - master
+schedules:
+- cron: "*/30 9-18 * * 1-5"
+  displayName: Every 30 Minutes
+  branches:
+    include:
+    - master
+  always: false
+
+steps:
+
+- task: Bash@3
+  displayName: App_Health_check
+  inputs:
+    targetType: 'inline'
+    script: |
+      export url= {{ parameters.url }}
+      sudo apt install curl -y
+          echo "----------------Checking mediawiki_switch health status-------------------------"
+          status="$(curl -I -k ${url} | head -1)"
+          code="${status}"
+          echo "status: $code"
+          if [[ "$code" == *"200"* ]] || [[ "$code" == *"308"* ]]; then
+              echo "mediawiki is Up and running with code $code"
+          else
+              echo "SonarQube is Down Requires action, error code $code"       
+          fi
+
+
