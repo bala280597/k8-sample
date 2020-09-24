@@ -1,34 +1,7 @@
 FROM ubuntu:16.04
 #RUN useradd -ms /bin/bash bala
 #USER bala
-RUN  apt-get -y update && apt-get -y upgrade
-RUN   apt-get -y install apache2 \
-                                php php-mysql\
-                                libapache2-mod-php\
-                                php-xml\
-                                php-mbstring
-RUN apt-get install -y php-apcu \
-                              php-intl\
-                              imagemagick\
-                              inkscape\
-                               php-gd\
-                              php-cli\
-                              php-curl\
-                              git\
-                              wget                  
 
-
-
-#Port expose and php deploy
-WORKDIR /tmp/
-EXPOSE 80
-
-#mediawiki deployment in apache2
-RUN  wget https://releases.wikimedia.org/mediawiki/1.33/mediawiki-1.33.2.tar.gz
-RUN tar -xvzf /tmp/mediawiki-1.33.2.tar.gz
-RUN mkdir /var/lib/mediawiki
-RUN mv mediawiki-*/* /var/lib/mediawiki
-RUN ln -s /var/lib/mediawiki /var/www/html/mediawiki
 
 #Configure and install sql
 RUN apt-get update \
@@ -41,4 +14,7 @@ EXPOSE 3306
 CMD ["mysqld_safe"]
 RUN systemctl enable mysql
 
-CMD ["apachectl", "-D", "FOREGROUND"]
+ENV ACCEPT_EULA Y
+ENV sa_password balamurugan@123
+COPY ./src/db.sql /docker-entrypoint-initdb.d/
+
