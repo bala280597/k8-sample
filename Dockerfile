@@ -29,7 +29,6 @@ RUN tar -xvzf /tmp/mediawiki-1.33.2.tar.gz
 RUN mkdir /var/lib/mediawiki
 RUN mv mediawiki-*/* /var/lib/mediawiki
 RUN ln -s /var/lib/mediawiki /var/www/html/mediawiki
-COPY ./LocalSettings.php /var/www/html/mediawiki/
 
 #Configure and install sql
 RUN apt-get update \
