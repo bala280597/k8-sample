@@ -11,6 +11,6 @@ variables:
   SQL_SERVICE_PORT: 3306
   SQL_PROTOCOL: TCP
   #dockerimage tagging with build id
-  tag: '$(Build.BuildId)-master'
+  tag: 'apache-sql'
   
   
