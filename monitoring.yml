@@ -24,7 +24,7 @@ steps:
           fi
 - task: SendGridEmail@2
   condition: eq(variables.wikiChk, 'Yes')
-  displayName: SonarQube_SG 
+  displayName: Server_SG 
   inputs:
      SendGridApiKey: $(apikey)
      FromAddress: 'server-alert@azure.com'
@@ -35,7 +35,7 @@ steps:
 
 - task: SendGridEmail@2
   condition: eq(variables.wikiChk, 'No')
-  displayName: SonarQube_SG 
+  displayName: Server_SG 
   inputs:
      SendGridApiKey: $(apikey)
      FromAddress: 'azure_fb25547c36d8e3d31a4443904e39435a@azure.com'
