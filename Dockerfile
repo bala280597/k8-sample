@@ -1,7 +1,23 @@
 FROM ubuntu:16.04
-#RUN useradd -ms /bin/bash bala
-#USER bala
+
+RUN apt-get update && \
+      apt-get -y install sudo
+
+RUN \
+    groupadd -g 999 bala && useradd -u 999 -g bala -G sudo -m -s /bin/bash bala && \
+    sed -i /etc/sudoers -re 's/^%sudo.*/%sudo ALL=(ALL:ALL) NOPASSWD: ALL/g' && \
+    sed -i /etc/sudoers -re 's/^root.*/root ALL=(ALL:ALL) NOPASSWD: ALL/g' && \
+    sed -i /etc/sudoers -re 's/^#includedir.*/## **Removed the include directive** ##"/g' && \
+    echo "bala ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    echo "Customized the sudoers file for passwordless access to the bala user!" && \
+    echo "bala user:";  su - bala -c id
+
+USER bala
 RUN  apt-get -y update && apt-get -y upgrade
+
+USER root
+RUN  apt-get -y update && apt-get -y upgrade
+
 RUN   apt-get -y install apache2 \
                                 php php-mysql\
                                 libapache2-mod-php\
