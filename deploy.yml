@@ -16,11 +16,17 @@ spec:
     containers:
       - name: apache
         image: ${IMAGE}
+        volumeMounts:
+          - name: storage
+            mountPath: /var/   
         ports:
         - name: apache
           containerPort: ${WEBCONTAINER_PORT}
         - name: mysql
           containerPort: ${SQL_CONTAINER_PORT}
+    volumes:
+    - name: storage
+      emptyDir: {}   
 ---
 apiVersion: v1
 kind: Service
