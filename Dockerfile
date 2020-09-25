@@ -58,10 +58,9 @@ EXPOSE 3306
 
 CMD ["mysqld_safe"]
 RUN systemctl enable mysql
-RUN mysql -u root;\
-CREATE USER 'balamurugan'@'localhost' IDENTIFIED BY 'balamurugan@123';\
-CREATE DATABASE wikidatabase;\
-GRANT ALL PRIVILEGES ON wikidatabase.* TO 'balamurugan'@'localhost';
+RUN mysql -u root -e "CREATE USER 'balamurugan'@'localhost' IDENTIFIED BY 'balamurugan@123'";\
+mysql -u root -e "CREATE DATABASE wikidatabase;"\
+mysql -u root -e "GRANT ALL PRIVILEGES ON wikidatabase.* TO 'balamurugan'@'localhost'";
 
 #restart the apache server foreground
 CMD ["apachectl", "-D", "FOREGROUND"]
