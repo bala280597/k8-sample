@@ -11,10 +11,14 @@ RUN apt-get update \
  && chown -R mysql:mysql /var/run/mysqld
 VOLUME ["/var/lib/mysql"]
 EXPOSE 3306
-CMD ["mysqld_safe"]
 RUN systemctl enable mysql
 
-ENV ACCEPT_EULA Y
-ENV sa_password balamurugan@123
-COPY ./src/db.sql /docker-entrypoint-initdb.d/
+#ENV ACCEPT_EULA Y
+#ENV sa_password balamurugan@123
+#COPY ./src/db.sql /docker-entrypoint-initdb.d/
+
+COPY ./src/docker-entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+RUN systemctl enable mysql
+CMD ["mysqld_safe"]
 
