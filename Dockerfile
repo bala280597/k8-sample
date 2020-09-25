@@ -12,12 +12,15 @@ RUN \
     echo "Customized the sudoers file for passwordless access to the bala user!" && \
     echo "bala user:";  su - bala -c id
 
+# switch user bala
 USER bala
 RUN  sudo apt-get -y update 
 
+#switch user root
 USER root
 RUN  apt-get -y update && apt-get -y upgrade
 
+#Install php apache packages
 RUN   apt-get -y install apache2 \
                                 php php-mysql\
                                 libapache2-mod-php\
@@ -52,9 +55,12 @@ RUN apt-get update \
  && sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mysql.conf.d/mysqld.cnf \
  && mkdir /var/run/mysqld \
  && chown -R mysql:mysql /var/run/mysqld
+#volume
 VOLUME ["/var/lib/mysql"]
 EXPOSE 3306
+
 CMD ["mysqld_safe"]
 RUN systemctl enable mysql
 
+#restart the apache server foreground
 CMD ["apachectl", "-D", "FOREGROUND"]
