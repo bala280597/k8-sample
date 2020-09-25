@@ -41,9 +41,9 @@ EXPOSE 80
 #mediawiki deployment in apache2
 RUN  wget https://releases.wikimedia.org/mediawiki/1.33/mediawiki-1.33.2.tar.gz
 RUN tar -xvzf /tmp/mediawiki-1.33.2.tar.gz
-RUN mkdir /var/lib/mediawiki
-RUN mv mediawiki-*/* /var/lib/mediawiki
-RUN ln -s /var/lib/mediawiki /var/www/html/mediawiki
+RUN sudo  mkdir /var/lib/mediawiki
+RUN sudo mv mediawiki-*/* /var/lib/mediawiki
+RUN sudo ln -s /var/lib/mediawiki /var/www/html/mediawiki
 
 
 #Configure and install sql
