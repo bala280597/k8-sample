@@ -109,9 +109,28 @@ stages:
 I created `Dockerfile`. As entire flow needs containerization. In this stage , docker image is built, tagged and pushed to registry.
 ```yaml DOCKERFILE
 FROM ubuntu:16.04
-#RUN useradd -ms /bin/bash bala
-#USER bala
+
+RUN apt-get update && \
+      apt-get -y install sudo
+
+RUN \
+    groupadd -g 999 bala && useradd -u 999 -g bala -G sudo -m -s /bin/bash bala && \
+    sed -i /etc/sudoers -re 's/^%sudo.*/%sudo ALL=(ALL:ALL) NOPASSWD: ALL/g' && \
+    sed -i /etc/sudoers -re 's/^root.*/root ALL=(ALL:ALL) NOPASSWD: ALL/g' && \
+    sed -i /etc/sudoers -re 's/^#includedir.*/## **Removed the include directive** ##"/g' && \
+    echo "bala ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    echo "Customized the sudoers file for passwordless access to the bala user!" && \
+    echo "bala user:";  su - bala -c id
+
+# switch user bala
+USER bala
+RUN  sudo apt-get -y update 
+
+#switch user root
+USER root
 RUN  apt-get -y update && apt-get -y upgrade
+
+#Install php apache packages
 RUN   apt-get -y install apache2 \
                                 php php-mysql\
                                 libapache2-mod-php\
@@ -126,7 +145,9 @@ RUN apt-get install -y php-apcu \
                               php-curl\
                               git\
                               wget                  
-RUN /etc/init.d/apache2 restart
+
+
+
 #Port expose and php deploy
 WORKDIR /tmp/
 EXPOSE 80
@@ -144,10 +165,16 @@ RUN apt-get update \
  && sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mysql.conf.d/mysqld.cnf \
  && mkdir /var/run/mysqld \
  && chown -R mysql:mysql /var/run/mysqld
+#volume
 VOLUME ["/var/lib/mysql"]
 EXPOSE 3306
+
 CMD ["mysqld_safe"]
 RUN systemctl enable mysql
+
+#restart the apache server foreground
+CMD ["apachectl", "-D", "FOREGROUND"]
+
 ```
 
 In this dockerfile , I had consumed ubuntu:16.04 and configuring apache web server,php and sql in it . Volume mounted for Sql operation. Exposed 80 and 3306 ports in Dockerfile for SQL and webservice.
@@ -179,10 +206,8 @@ export WEBREPLICA=${{variables.WEBREPLICA}}
           export WEB_SERVICE_TYPE=${{variables.WEB_SERVICE_TYPE}}
           export SQL_CONTAINER_PORT=${{variables.SQL_CONTAINER_PORT}}
           export SQL_SERVICE_PORT=${{variables.SQL_SERVICE_PORT}}
-          export VOLUME_SQL_NAME=${{variables.VOLUME_SQL_NAME}}
-          export SQL_SERVICE_TYPE=${{variables.SQL_SERVICE_TYPE}}
           export STORAGE_MOUNT=${{variables.STORAGE_MOUNT}}
-          export PVC_NAME=${{variables.PVC_NAME}}
+          
           cat ${{ parameters.arguments }} | envsubst > deployment.yml
 ```
 The K8s deloy file is with Dynamic variable get substituted.
@@ -206,11 +231,17 @@ spec:
     containers:
       - name: apache
         image: ${IMAGE}
+        volumeMounts:
+          - name: storage
+            mountPath: /var/   
         ports:
         - name: apache
           containerPort: ${WEBCONTAINER_PORT}
         - name: mysql
           containerPort: ${SQL_CONTAINER_PORT}
+    volumes:
+    - name: storage
+      emptyDir: {}   
 ---
 apiVersion: v1
 kind: Service
@@ -229,7 +260,6 @@ spec:
     protocol: ${SQL_PROTOCOL}
   selector:
     app: apache        
-
 
 ```
 In the above Yaml, I had created Kind: Deployment and Service of front end and backend in single `deploy.yml` file.
