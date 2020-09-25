@@ -16,9 +16,6 @@ RUN \
 USER bala
 RUN  sudo apt-get -y update 
 
-
-RUN  sudo apt-get -y update && apt-get -y upgrade
-
 #Install php apache packages
 RUN   sudo apt-get -y install apache2 \
                                 php php-mysql\
