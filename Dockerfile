@@ -13,7 +13,7 @@ RUN \
     echo "bala user:";  su - bala -c id
 
 USER bala
-RUN  apt-get -y update 
+RUN  sudo apt-get -y update 
 
 USER root
 RUN  apt-get -y update && apt-get -y upgrade
