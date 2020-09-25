@@ -20,6 +20,11 @@
 # Backend:
 ![SQL sync](https://user-images.githubusercontent.com/47313756/93747085-cd781a80-fc13-11ea-9e5f-d33ca4c1533e.png)
 
+# Continious Monitoring with shell script in Azure Devops
+![monitor](https://user-images.githubusercontent.com/47313756/94228572-e128c700-ff1a-11ea-954c-09124768151d.png)
+
+By this operation, The pipeline is cron job for every 30  minutes to check whether the server is up and running.
+
 # Description:
 In this project, I am deploying binaries of sample java application in Azure Kubernetes Service in desired cluster using docker image.
 For Continious Integeration of Docker Build and AKS Deployment, I used Azure Devops. I developed automation script in `azure-pipelines.yml` .
