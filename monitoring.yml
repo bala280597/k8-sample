@@ -1,13 +1,9 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 pool:
   vmImage: 'ubuntu-latest'
+variables:
+- group: Api-Group
 
 steps:
-
 - task: Bash@3
   displayName: App_Health_check
   inputs:
@@ -21,6 +17,29 @@ steps:
           echo "status: $code"
           if [[ "$code" == *"200"* ]] || [[ "$code" == *"308"* ]]; then
               echo "mediawiki is Up and running with code $code"
+              echo "##vso[task.setvariable variable=wikiChk]Yes"
           else
-              echo "mediawiki is Down Requires action, error code $code"       
+              echo "SonarQube is Down Requires action, error code $code"  
+              echo "##vso[task.setvariable variable=wikiChk]No"     
           fi
+- task: SendGridEmail@2
+  condition: eq(variables.wikiChk, 'Yes')
+  displayName: SonarQube_SG 
+  inputs:
+     SendGridApiKey: $(apikey)
+     FromAddress: 'server-alert@azure.com'
+     ToAddresses: 'balabala2805@gmail.com'
+     Subject: 'Server is running'
+     emailBodyFormat: 'InLine'
+     EmailBody: 'Server is running'
+
+- task: SendGridEmail@2
+  condition: eq(variables.wikiChk, 'No')
+  displayName: SonarQube_SG 
+  inputs:
+     SendGridApiKey: $(apikey)
+     FromAddress: 'azure_fb25547c36d8e3d31a4443904e39435a@azure.com'
+     ToAddresses: 'balabala2805@gmail.com'
+     Subject: 'SonarQube is Down Action Required'
+     emailBodyFormat: 'InLine'
+     EmailBody: 'SonarQube is not running, Please contact team.'
